@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Tech Insights - Home{% endblock %}
+{% block content %}
+<div class="content-grid">
+    <section class="featured-posts">
+        {% for post in posts %}
+        <article class="post-card">
+            {% if post.image %}
+            <img src="{{ post.image }}" alt="{{ post.title }}" class="post-image">
+            {% endif %}
+            <div class="post-content">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar"></i> {{ post.date_posted|format_date }}</span>
+                    <span><i class="far fa-user"></i> {{ post.author }}</span>
+                    <span><i class="far fa-folder"></i> 
+                        <a href="{{ url_for('category', slug=post.category.slug) }}">
+                            {{ post.category.name }}
+                        </a>
+                    </span>
+                </div>
+                <h2 class="post-title">{{ post.title }}</h2>
+                <p class="post-excerpt">{{ post.excerpt or post.content[:200] + '...' }}</p>
+                <a href="{{ url_for('post', slug=post.slug) }}" class="read-more">Read More →</a>
+            </div>
+        </article>
+        {% endfor %}
+        <div class="pagination">
+            {% if current_page > 1 %}
+            <a href="{{ url_for('home', page=current_page-1) }}" class="page-link">← Previous</a>
+            {% endif %}
+            
+            {% for page in range(1, total_pages + 1) %}
+            <a href="{{ url_for('home', page=page) }}" 
+               class="page-link {% if page == current_page %}active{% endif %}">
+                {{ page }}
+            </a>
+            {% endfor %}
+            
+            {% if current_page < total_pages %}
+            <a href="{{ url_for('home', page=current_page+1) }}" class="page-link">Next →</a>
+            {% endif %}
+        </div>
+    </section>
+    <aside class="sidebar">
+        <div class="widget">
+            <h3 class="widget-title">Categories</h3>
+            <ul class="category-list">
+                {% for category in get_categories() %}
+                <li class="category-item">
+                    <a href="{{ url_for('category', slug=category.slug) }}" class="category-link">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="widget">
+            <h3 class="widget-title">Popular Tags</h3>
+            <div class="tag-cloud">
+                {% for tag in get_tags() %}
+                <a href="{{ url_for('tag', slug=tag.slug) }}" class="tag">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

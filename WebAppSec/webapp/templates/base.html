@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tech Insights{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="{{ url_for('home') }}" class="logo">Tech Insights</a>
+            <div class="nav-menu">
+                <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+                {% for category in get_categories() %}
+                    <a href="{{ url_for('category', slug=category.slug) }}" class="nav-link">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </nav>
+    </header>
+    <div class="search-container">
+        <form class="search-bar" action="{{ url_for('search') }}" method="GET">
+            <input type="text" name="q" class="search-input" placeholder="Search articles...">
+            <button type="submit" class="search-button">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+    </div>
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-widget">
+                <h3>About Us</h3>
+                <p>Tech Insights brings you the latest in technology, development, and innovation.</p>
+            </div>
+            <div class="footer-widget">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" class="nav-link">Privacy Policy</a></li>
+                    <li><a href="#" class="nav-link">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-widget">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

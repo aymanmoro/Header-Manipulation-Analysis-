@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickjacking Demo</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0.9; /* Increased opacity to make it less noticeable */
+            z-index: 1;
+        }
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            background: rgba(0, 0, 0, 0); /* Fully transparent background */
+        }
+        .overlay button {
+            padding: 30px 50px;
+            font-size: 30px;
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .loading-spinner {
+            display: none;
+            margin-top: 30px;
+            font-size: 44px;
+        }
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            font-size: 24px;
+            color: green;
+        }
+        .color-changing-text {
+            margin-top: 50px;
+            font-size: 70px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: colorChange 2s ease infinite;
+        }
+        @keyframes colorChange {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay">
+        <button onclick="handleClick()">Claim Your Prize</button>
+        <div class="color-changing-text">Hurry up! Limited time offer!</div>
+        <div class="loading-spinner" id="loadingSpinner">Loading...</div>
+        <div class="success-message" id="successMessage">Success! Your prize is on its way!</div>
+    </div>
+    <iframe src="http://localhost:5000" id="iframe"></iframe>
+
+    <script>
+        function handleClick() {
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            // Simulate a delay before showing the alert
+            setTimeout(() => {
+                alert('You have been tricked!');
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Hide the overlay and iframe after the alert
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('iframe').style.display = 'none';
+            }, 2000); // 2-second delay
+        }
+    </script>
+</body>
+</html>
