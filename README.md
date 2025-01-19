@@ -58,30 +58,24 @@ This project demonstrates and analyzes web application vulnerabilities related t
 - pip package manager
 
 ### Setup
-1. Create and activate a virtual environment:
-
-bash
+#1. Create and activate a virtual environment:
 
 python -m venv venv
 source venv/bin/activate  # On Windows, use: venv\Scripts\activate
 
-2. Install dependencies:
-
-bash
+#2. Install dependencies:
 
 pip install flask flask-sqlalchemy flask-talisman python-slugify
 
-Usage
-Running the Vulnerable Application
-
-bash
+#Usage
+#Running the Vulnerable Application
 
 python app.py
 
 The application will be available at http://127.0.0.1:5000
-3. Running the Secured Application
 
-bash
+
+#3. Running the Secured Application
 
 python appsec.py
 
@@ -91,7 +85,6 @@ python appsec.py
     Cross-Site Scripting (XSS)
     HTTP Host Header attacks
     Man-in-the-Middle (MITM) attacks
-
 #Security Features
 Vulnerable Version (app.py)
 
